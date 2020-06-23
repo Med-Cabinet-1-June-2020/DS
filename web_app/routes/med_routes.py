@@ -14,13 +14,6 @@ DB_PASSWORD=os.getenv("DB_PASSWORD"),
 DB_HOST=os.getenv("DB_HOST")
 DB_URL=os.getenv("DB_URL")
 
-df = pd.read_csv('https://raw.githubusercontent.com/Med-Cabinet-1-June-2020/DS/master/csv/compatible_cannabis.csv')
-
-engine = create_engine(DB_URL)
-con = engine.connect()
-df.to_sql("medcabinet", engine)
-con.close()
-
 conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
 
 med_routes = Blueprint("med_routes", __name__)
