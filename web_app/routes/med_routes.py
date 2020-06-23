@@ -1,9 +1,38 @@
-from flask import Flask, render_template, jsonify, Blueprint
-from web_app.services.model_service import modelservice
+from flask import Flask, render_template, jsonify, Blueprint, request
+from web_services.model_service import modelservice
+import psycopg2
+import os
+from dotenv import load_dotenv
+import pandas as pd
+from sqlalchemy import create_engine
 
-# from web_app.services import _____
+
+load_dotenv()
+DB_NAME=os.getenv("DB_NAME"),
+DB_USER=os.getenv("DB_USER"),
+DB_PASSWORD=os.getenv("DB_PASSWORD"),
+DB_HOST=os.getenv("DB_HOST")
+DB_URL=os.getenv("DB_URL")
+
+conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
 
 med_routes = Blueprint("med_routes", __name__)
+
+@med_routes.route("/recommender", methods=['GET', 'POST'])
+def recommender():
+
+    pg_curs = conn.cursor()
+
+    pg_curs.execute("SELECT * FROM medcabinet;")
+
+    results = modelservice(features=['depression, happiness, insomnia'], pg_curs=pg_curs)
+
+    # to save transactions
+    # connection.commit()
+    # cursor.close()
+    # connection.close()
+
+    return results
 
 @med_routes.route("/dummy_data", methods=['GET'])
 def dummy_data(): 
