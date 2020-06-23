@@ -8,7 +8,6 @@ click==7.1.2
 cryptography==2.9.2
 cycler==0.10.0
 cymem==2.0.3
-en-core-web-sm==2.3.0
 Flask==1.1.2
 Flask-Migrate==2.4.0
 Flask-SQLAlchemy==2.4.1
