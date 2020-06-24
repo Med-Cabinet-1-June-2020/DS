@@ -3,8 +3,6 @@ from web_app.services.model_service import modelservice
 import psycopg2
 import os
 from dotenv import load_dotenv
-import pandas as pd
-from sqlalchemy import create_engine
 import json
 
 
@@ -24,20 +22,16 @@ med_routes = Blueprint("med_routes", __name__)
 def recommender():
 
     pg_curs = conn.cursor()
-    
-    medical = request.get_json(['medical'])
-    medical = medical["medical"]
 
-    effects = request.get_json(['effects'])
-    effects = effects["effects"]
+    medical = request.json['medical']
+    effects = request.json['effects']
 
     features = str(medical) + ", " + str(effects)
     features = features.replace("'", "").replace("[","").replace("]","")
-    features = [features]
-
-    print(features)
 
     results = modelservice(features=[features], pg_curs=pg_curs)
+
+    print(results[0])
 
     pg_curs.close()
 
