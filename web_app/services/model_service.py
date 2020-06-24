@@ -25,10 +25,12 @@ def modelservice(features, pg_curs):
 
     print(prediction)
 
-    prediction = tuple(prediction[1][0])
+#     prediction = tuple(prediction[1][0])
 
-    query = f'''SELECT * FROM strains WHERE index in {prediction} ORDER BY "Rating" DESC'''
-    pg_curs.execute(query)
+# #     query = f'''SELECT * FROM strains WHERE index in {prediction} ORDER BY "Rating" DESC'''
+#     query = f'''SELECT index, strain, "Type", "Rating", flavors, positive, negative, medical, "Description" FROM medcabinet WHERE index in {prediction} ORDER BY "Rating" DESC;'''
+
+#     pg_curs.execute(query)
     result = pg_curs.fetchall()
 
     return result

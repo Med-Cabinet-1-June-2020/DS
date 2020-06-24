@@ -1,18 +1,20 @@
 from flask import Flask, render_template, jsonify, Blueprint, request
-from web_services.model_service import modelservice
+from web_app.services.model_service import modelservice
 import psycopg2
 import os
 from dotenv import load_dotenv
 import pandas as pd
 from sqlalchemy import create_engine
+import json
 
 
 load_dotenv()
-DB_NAME=os.getenv("DB_NAME"),
-DB_USER=os.getenv("DB_USER"),
-DB_PASSWORD=os.getenv("DB_PASSWORD"),
+DB_NAME=os.getenv("DB_NAME")
+DB_USER=os.getenv("DB_USER")
+DB_PASSWORD=os.getenv("DB_PASSWORD")
 DB_HOST=os.getenv("DB_HOST")
 DB_URL=os.getenv("DB_URL")
+
 
 conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host=DB_HOST)
 
@@ -22,17 +24,34 @@ med_routes = Blueprint("med_routes", __name__)
 def recommender():
 
     pg_curs = conn.cursor()
+    
+    medical = request.get_json(['medical'])
+    medical = medical["medical"]
 
-    pg_curs.execute("SELECT * FROM medcabinet;")
+    effects = request.get_json(['effects'])
+    effects = effects["effects"]
 
-    results = modelservice(features=['depression, happiness, insomnia'], pg_curs=pg_curs)
+    features = str(medical) + ", " + str(effects)
+    features = features.replace("'", "").replace("[","").replace("]","")
+    features = [features]
 
-    # to save transactions
-    # connection.commit()
+    print(features)
+
+    results = modelservice(features=[features], pg_curs=pg_curs)
+
+    pg_curs.close()
+
+    # Post-Processing
+    # Create a jsonified dictionary with labels 
+    # f"ID: {{index}}, Strain: {{strain}}, Type:{{"Type"}}, Rating: {{"Rating"}}, Flavors: {{flavors}}, Positive Effects: {{positive}}, Negative Effects: {{negative}}, Medical Symptoms: {{medical}}, Description: {{"Description"}}"
     # cursor.close()
-    # connection.close()
+    # Then jsonify it 
 
-    return results
+    # Should we create a dataframe from the results so that it's more consumable and user-friendly? 
+    #def to_df(results):
+    #   return pd.DataFrame([dict(results)])
+
+    return jsonify(results)
 
 @med_routes.route("/dummy_data", methods=['GET'])
 def dummy_data(): 
