@@ -13,6 +13,10 @@ def modelservice(features, pg_curs):
     query = f'''SELECT index, strain, "Type", "Rating", flavors, positive, negative, medical, "Description" FROM medcabinet WHERE index in {prediction} ORDER BY "Rating" DESC;'''
 
     pg_curs.execute(query)
-    result = pg_curs.fetchall()
 
-    return result
+    desc = pg_curs.description
+    column_names = [col[0] for col in desc]
+    data = [dict(zip(column_names, row))
+            for row in pg_curs.fetchall()]
+
+    return data

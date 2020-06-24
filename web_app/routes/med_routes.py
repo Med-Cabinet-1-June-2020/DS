@@ -3,7 +3,6 @@ from web_app.services.model_service import modelservice
 import psycopg2
 import os
 from dotenv import load_dotenv
-import json
 
 
 load_dotenv()
@@ -30,8 +29,6 @@ def recommender():
     features = features.replace("'", "").replace("[","").replace("]","")
 
     results = modelservice(features=[features], pg_curs=pg_curs)
-
-    print(results[0])
 
     pg_curs.close()
 
