@@ -1,5 +1,5 @@
 from flask import Flask
-# from web_app.routes.med_routes import med_routes
+from web_app.routes.med_routes import med_routes
 
 
 
