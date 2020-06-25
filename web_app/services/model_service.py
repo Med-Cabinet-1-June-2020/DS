@@ -10,7 +10,7 @@ def modelservice(features, pg_curs):
     prediction = model.kneighbors(text_transformed.todense())
     prediction = tuple(prediction[1][0])
 
-    query = f'''SELECT index, strain, "Type", "Rating", flavors, positive, negative, medical, "Description" FROM medcabinet WHERE index in {prediction} ORDER BY "Rating" DESC;'''
+    query = f'''SELECT index, strain, "Type" AS type, "Rating" AS rating, flavors, positive, negative, medical, "Description" AS description FROM medcabinet WHERE index in {prediction} ORDER BY "Rating" DESC;'''
 
     pg_curs.execute(query)
 
