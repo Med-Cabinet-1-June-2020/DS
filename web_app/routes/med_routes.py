@@ -3,7 +3,7 @@ from web_app.services.model_service import modelservice
 import psycopg2
 import os
 from dotenv import load_dotenv
-
+import ast
 
 load_dotenv()
 DB_NAME=os.getenv("DB_NAME")
@@ -30,17 +30,13 @@ def recommender():
 
     results = modelservice(features=[features], pg_curs=pg_curs)
 
+    for i in range (0,10):
+        results[i]['flavors'] = ast.literal_eval(results[i]['flavors'])
+        results[i]['medical'] = ast.literal_eval(results[i]['medical'])
+        results[i]['negative'] = ast.literal_eval(results[i]['negative'])
+        results[i]['positive'] = ast.literal_eval(results[i]['positive'])
+
     pg_curs.close()
-
-    # Post-Processing
-    # Create a jsonified dictionary with labels 
-    # f"ID: {{index}}, Strain: {{strain}}, Type:{{"Type"}}, Rating: {{"Rating"}}, Flavors: {{flavors}}, Positive Effects: {{positive}}, Negative Effects: {{negative}}, Medical Symptoms: {{medical}}, Description: {{"Description"}}"
-    # cursor.close()
-    # Then jsonify it 
-
-    # Should we create a dataframe from the results so that it's more consumable and user-friendly? 
-    #def to_df(results):
-    #   return pd.DataFrame([dict(results)])
 
     return jsonify(results)
 
