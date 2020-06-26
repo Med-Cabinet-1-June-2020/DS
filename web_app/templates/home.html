@@ -28,8 +28,10 @@
     <!-- see: https://jinja.palletsprojects.com/en/2.11.x/tricks/ -->
     <!-- see: https://getbootstrap.com/docs/4.0/components/navbar/ -->
     {% set nav_links = [
-      ('/recommender', 'recommender', 'Recommender'),
-      ('/dummy_data', 'dummy_data', 'Sample Recommendations')
+      ('https://med-cabinet-2020.netlify.app/', 'sign_up', 'Sign Up'),
+      ('/recommender', 'recommender', 'Sample Recommendations'),
+      ('https://compassionate-sinoussi-4fbe79.netlify.app/about.html', 'about_us', 'Meet the Team'),
+      ('https://compassionate-sinoussi-4fbe79.netlify.app/contact.html', 'contact_us', 'Contact Us'),
     ] -%}
     {% set active_page = active_page|default('index') -%}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
