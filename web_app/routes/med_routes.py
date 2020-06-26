@@ -17,6 +17,11 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD, host
 
 med_routes = Blueprint("med_routes", __name__)
 
+
+@med_routes.route("/", methods=['GET'])
+def home():
+    return render_template("home.html")
+    
 @med_routes.route("/recommender", methods=['GET', 'POST'])
 def recommender():
 
