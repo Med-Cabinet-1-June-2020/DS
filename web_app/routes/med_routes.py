@@ -21,29 +21,56 @@ med_routes = Blueprint("med_routes", __name__)
 @med_routes.route("/", methods=['GET'])
 def home():
     return render_template("home.html")
-    
+
 @med_routes.route("/recommender", methods=['GET', 'POST'])
 def recommender():
 
     pg_curs = conn.cursor()
 
-    medical = request.json['medical']
-    effects = request.json['effects']
+    if request.method == "POST":
+            
+        medical = request.json['medical']
+        effects = request.json['effects']
 
-    features = str(medical) + ", " + str(effects)
-    features = features.replace("'", "").replace("[","").replace("]","")
+        features = str(medical) + ", " + str(effects)
+        features = features.replace("'", "").replace("[","").replace("]","")
 
-    results = modelservice(features=[features], pg_curs=pg_curs)
+        results = modelservice(features=[features], pg_curs=pg_curs)
 
-    for i in range (0,10):
-        results[i]['flavors'] = ast.literal_eval(results[i]['flavors'])
-        results[i]['medical'] = ast.literal_eval(results[i]['medical'])
-        results[i]['negative'] = ast.literal_eval(results[i]['negative'])
-        results[i]['positive'] = ast.literal_eval(results[i]['positive'])
+        for i in range (0,10):
+            results[i]['flavors'] = ast.literal_eval(results[i]['flavors'])
+            results[i]['medical'] = ast.literal_eval(results[i]['medical'])
+            results[i]['negative'] = ast.literal_eval(results[i]['negative'])
+            results[i]['positive'] = ast.literal_eval(results[i]['positive'])
 
-    pg_curs.close()
+        pg_curs.close()
 
-    return jsonify(results)
+        return jsonify(results)
+    
+    else:
+        samples = {
+                    "medical": ["Dizzy", "Dry Mouth", "Paranoid", "Dry Eyes", "Anxious"],
+                    "effects": ["Relaxed", "Hungry", "Euphoric", "Happy", "Creative"]
+                    }
+
+        medical2 = samples["medical"]
+        effects2 = samples["effects"]
+        
+        samples = str(medical2) + ", " + str(effects2)
+        samples = samples.replace("'", "").replace("[","").replace("]","")
+
+        results = modelservice(features=[samples], pg_curs=pg_curs)
+
+        for i in range (0,10):
+            results[i]['flavors'] = ast.literal_eval(results[i]['flavors'])
+            results[i]['medical'] = ast.literal_eval(results[i]['medical'])
+            results[i]['negative'] = ast.literal_eval(results[i]['negative'])
+            results[i]['positive'] = ast.literal_eval(results[i]['positive'])
+
+        pg_curs.close()
+
+        return jsonify(results)
+        
 
 @med_routes.route("/dummy_data", methods=['GET'])
 def dummy_data(): 

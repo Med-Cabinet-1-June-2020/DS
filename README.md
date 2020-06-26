@@ -20,8 +20,9 @@ Our model seeks to generate ten recommendations of strains of cannabis for new c
 1. Flask app deployed; routes can be found by running "flask run" in the terminal.
 
 2. Heroku up deployed with two live routes:
-    1. Takes input to recommend different cannabis strains based on medical symptoms and preferred positive effects: https://bestmedcab1.herokuapp.com/recommender
-    2. Contains a JSON-formatted result set: https://bestmedcab1.herokuapp.com/dummy_data
+    1. Homepage contains navbar links to the Recommender and Sample Recommendation pages.
+    2. Takes input to recommend different cannabis strains based on medical symptoms and preferred positive effects: https://bestmedcab1.herokuapp.com/recommender.
+    3. Contains a JSON-formatted result set: https://bestmedcab1.herokuapp.com/dummy_data.
 
 ### SAMPLE INPUT AND OUTPUT:
 
